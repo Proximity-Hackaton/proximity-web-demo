@@ -61,12 +61,15 @@ export default{
             .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges}).catch((e) => this.walletIdNotFound = true);
       
       }else{
+         let minTimeStamp = Date.now() - parseInt(this.timeFrame) * 60000; 
+         console.log(Date.now());
+
          if(this.trustScore){
-            fetch("http://localhost:8080/trustedNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+(Date.now()-this.timeFrame*60000)+"&maxTimeStamp="+Date.now())
+            fetch("http://localhost:8080/trustedNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+minTimeStamp+"&maxTimeStamp="+Date.now())
             .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges}).catch((e) => this.walletIdNotFound = true);
              
          }else{
-            fetch("http://localhost:8080/rawNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+(Date.now()-this.timeFrame*60000)+"&maxTimeStamp="+Date.now())
+            fetch("http://localhost:8080/rawNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+minTimeStamp+"&maxTimeStamp="+Date.now())
                .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges}).catch((e) => this.walletIdNotFound = true);
       
          }
