@@ -20,6 +20,10 @@ export function DemoView(props){
       console.log("clicked");
       props.onExploreClicked();
    }
+
+   function trustScoreListener(e){
+      props.onTrustScoreChanged(e.target.checked);
+   }
    
    return <div className="demo-container">
       <div className="sidebar">
@@ -69,6 +73,21 @@ export function DemoView(props){
                placeholder="0"
                onInput={timeFrameListener}
             ></input>
+
+            <div className="form-label-container">
+               <label className="form-label" for="trust-scores">Trust scores</label>
+            </div>
+            <div>
+               <input 
+               id="sidebar-form-trustscores" 
+               name="trust-scores"
+               className="form-label-input" 
+               value={props.timeFrame ? props.timeFrame : ""}
+               type="checkbox"
+               onChange={trustScoreListener}
+               ></input>
+            </div>
+            
 
             <button 
                className="sidebar-form-button" 

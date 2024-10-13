@@ -20,6 +20,14 @@ export function Demo(props){
    function onExploreClicked(){
       props.model.onExploreClicked();
    }
+
+   function onTrustScoreChanged(b){
+      if(b){
+         props.model.setTrustScore();
+      }else{
+         props.model.resetTrustScore();
+      }
+   }
    
    function onTimeFrameChanged(timeFrame){
       let d = parseInt(timeFrame);
@@ -42,6 +50,7 @@ export function Demo(props){
       onDepthChanged={onDepthChanged}
       onWalletIDChanged={onWalletIDChanged}
       onExploreClicked={onExploreClicked}
+      onTrustScoreChanged={onTrustScoreChanged}
       onTimeFrameChanged={onTimeFrameChanged}
       exploreDisabled={!props.model.depth || !props.model.walletId || !props.model.timeFrame || props.model.depthWrongType || props.model.timeFrameWrongType}
    ></DemoView>

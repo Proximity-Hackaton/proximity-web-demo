@@ -17,6 +17,15 @@ export default{
    walletIdNotFound:false,
 
    useFakeDb: false,
+   trustScore: false,
+
+   setTrustScore : function (){
+      this.trustScore = true;
+   },
+
+   resetTrustScore : function (){
+      this.trustScore = false;
+   },
 
    setDepth : function (depth){
       this.depth = depth;
@@ -45,16 +54,22 @@ export default{
 
    onExploreClicked : function (){
    
+      this.walletIdNotFound = false;
+
       if(this.useFakeDb){
-         this.walletIdNotFound = false;
          fetch("http://localhost:8080/fakeRawNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+this.timeFrame+"&maxTimeStamp="+100)
-            .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges});
+            .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges}).catch((e) => this.walletIdNotFound = true);
       
       }else{
-         this.walletIdNotFound = false;
-         fetch("http://localhost:8080/rawNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+(Date.now()-this.timeFrame*60000)+"&maxTimeStamp="+Date.now())
-            .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges});
+         if(this.trustScore){
+            fetch("http://localhost:8080/trustedNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+(Date.now()-this.timeFrame*60000)+"&maxTimeStamp="+Date.now())
+            .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges}).catch((e) => this.walletIdNotFound = true);
+             
+         }else{
+            fetch("http://localhost:8080/rawNeighborhood?" + "source="+ this.walletId+"&depth="+this.depth+"&minTimeStamp="+(Date.now()-this.timeFrame*60000)+"&maxTimeStamp="+Date.now())
+               .then((response) => response.json()).then((json) => {this.nodes = json.nodes; this.edges = json.edges}).catch((e) => this.walletIdNotFound = true);
       
+         }
       }
    },
 
